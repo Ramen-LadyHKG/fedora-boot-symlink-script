@@ -10,81 +10,81 @@ NC='\033[0m' # No Colour
 
 # Define Boot Directory
 BOOT_DIR="/boot"
+KERNEL_VARIANT="surface"
 
 #############################################
 
 # Obtain current symlink versions
 CURRENT_FEDORA_SYMLINK=$(readlink -f "${BOOT_DIR}/vmlinuz-fedora" 2>/dev/null)
-CURRENT_SURFACE_SYMLINK=$(readlink -f "${BOOT_DIR}/vmlinuz-fedora-surface" 2>/dev/null)
+#CURRENT_VARIANT_SYMLINK=$(readlink -f "${BOOT_DIR}/vmlinuz-fedora-${KERNEL_VARIANT}" 2>/dev/null)
 
 CURRENT_FEDORA_INITRAMFS_SYMLINK=$(readlink -f "${BOOT_DIR}/initramfs-fedora.img" 2>/dev/null)
-CURRENT_SURFACE_INITRAMFS_SYMLINK=$(readlink -f "${BOOT_DIR}/initramfs-fedora-surface.img" 2>/dev/null)
+#CURRENT_VARIANT_INITRAMFS_SYMLINK=$(readlink -f "${BOOT_DIR}/initramfs-fedora-${KERNEL_VARIANT}.img" 2>/dev/null)
 
 ##############################################
 
 # Locate the latest Official Fedora Kernel Image
-# LATEST_OFFICIAL_KERNEL=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'vmlinuz-*.x86_64' ! -name '*surface*' | sort -V | tail -n 1)
+LATEST_OFFICIAL_KERNEL=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'vmlinuz-*.x86_64' ! -name "*${KERNEL_VARIANT}*" | sort -V | tail -n 1)
 
-# Locate the latest Official Fedora Surface Kernel Image
-LATEST_SURFACE_KERNEL=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'vmlinuz-*.x86_64' -name '*surface*' | sort -V | tail -n 1)
+# Locate the latest Official Fedora $KERNEL_VARIANT Kernel Image
+# LATEST_VARIANT_KERNEL=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'vmlinuz-*.x86_64' -name "*${KERNEL_VARIANT}*" | sort -V | tail -n 1)
 
 # Locate the latest Official Fedora Initramfs Image
-# LATEST_OFFICIAL_INITRAMFS=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'initramfs-*.img' ! -name '*surface*' | sort -V | tail -n 1)
+LATEST_OFFICIAL_INITRAMFS=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'initramfs-*.img' ! -name "*${KERNEL_VARIANT}*" | sort -V | tail -n 1)
 
-# Locate the latest Official Fedora Surface Initramfs Image
-LATEST_SURFACE_INITRAMFS=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'initramfs-*.img' -name '*surface*' | sort -V | tail -n 1)
+# Locate the latest Official Fedora $KERNEL_VARIANT Initramfs Image
+# LATEST_VARIANT_INITRAMFS=$(find ${BOOT_DIR} -maxdepth 1 -type f -name 'initramfs-*.img' -name "*${KERNEL_VARIANT}*" | sort -V | tail -n 1)
 
 ###############################################
 
 # Create or update "vmlinuz-fedora" symlink
-#if [ -n "$LATEST_OFFICIAL_KERNEL" ]; then
-#    if [ -n "$CURRENT_FEDORA_SYMLINK" ]; then
-#        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous vmlinuz-fedora version:\n${BLUE}$CURRENT_FEDORA_SYMLINK${NC}"
-#    else
-#        echo -e "${DARK_RED}###################################################\n\n${RED}No previous vmlinuz-fedora symlink found.${NC}"
-#    fi
-#    ln -srf "$LATEST_OFFICIAL_KERNEL" "${BOOT_DIR}/vmlinuz-fedora"
-#    echo -e "\n${GREEN}Successfully updated vmlinuz-fedora to\n${BLUE}$LATEST_OFFICIAL_KERNEL\n\n${DARK_RED}###################################################${NC}"
-#else
-#    echo -e "\n${RED}Failed to find the latest official kernel\n\n${DARK_RED}###################################################${NC}"
-#fi
-
-# Create or update "vmlinuz-fedora-surface" symlink
-if [ -n "$LATEST_SURFACE_KERNEL" ]; then
-    if [ -n "$CURRENT_SURFACE_SYMLINK" ]; then
-        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous vmlinuz-fedora-surface version:\n${BLUE}$CURRENT_SURFACE_SYMLINK${NC}"
+if [ -n "$LATEST_OFFICIAL_KERNEL" ]; then
+    if [ -n "$CURRENT_FEDORA_SYMLINK" ]; then
+        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous vmlinuz-fedora version:\n${BLUE}$CURRENT_FEDORA_SYMLINK${NC}"
     else
-        echo -e "${DARK_RED}###################################################\n\n${RED}No previous vmlinuz-fedora-surface symlink found.${NC}"
+        echo -e "${DARK_RED}###################################################\n\n${RED}No previous vmlinuz-fedora symlink found.${NC}"
     fi
-    ln -srf "$LATEST_SURFACE_KERNEL" "${BOOT_DIR}/vmlinuz-fedora-surface"
-    echo -e "\n${GREEN}Successfully updated vmlinuz-fedora-surface to\n${BLUE}$LATEST_SURFACE_KERNEL\n${NC}"
+    ln -srf "$LATEST_OFFICIAL_KERNEL" "${BOOT_DIR}/vmlinuz-fedora"
+    echo -e "\n${GREEN}Successfully updated vmlinuz-fedora to\n${BLUE}$LATEST_OFFICIAL_KERNEL\n\n${DARK_RED}###################################################${NC}"
 else
-    echo -e "\n${RED}Failed to find the latest Surface kernel\n\${NC}"
+    echo -e "\n${RED}Failed to find the latest official kernel\n\n${DARK_RED}###################################################${NC}"
 fi
+
+# Create or update "vmlinuz-fedora-${KERNEL_VARIANT}" symlink
+#if [ -n "$LATEST_VARIANT_KERNEL" ]; then
+#    if [ -n "$CURRENT_VARIANT_SYMLINK" ]; then
+#        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous vmlinuz-fedora-${KERNEL_VARIANT} version:\n${BLUE}$CURRENT_VARIANT_SYMLINK${NC}"
+#    else
+#        echo -e "${DARK_RED}###################################################\n\n${RED}No previous vmlinuz-fedora-${KERNEL_VARIANT} symlink found.${NC}"
+#    fi
+#    ln -srf "$LATEST_VARIANT_KERNEL" "${BOOT_DIR}/vmlinuz-fedora-${KERNEL_VARIANT}"
+#    echo -e "\n${GREEN}Successfully updated vmlinuz-fedora-${KERNEL_VARIANT} to\n${BLUE}$LATEST_VARIANT_KERNEL\n${NC}"
+#else
+#    echo -e "\n${RED}Failed to find the latest $KERNEL_VARIANT kernel\n\${NC}"
+#fi
 
 # Create or update "initramfs-fedora" symlink
-#if [ -n "$LATEST_OFFICIAL_INITRAMFS" ]; then
-#    if [ -n "$CURRENT_FEDORA_INITRAMFS_SYMLINK" ]; then
-#        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous initramfs-fedora version:\n${BLUE}$CURRENT_FEDORA_INITRAMFS_SYMLINK${NC}"
-#    else
-#        echo -e "${DARK_RED}###################################################\n\n${RED}No previous initramfs-fedora symlink found.${NC}"
-#    fi
-#    ln -srf "$LATEST_OFFICIAL_INITRAMFS" "${BOOT_DIR}/initramfs-fedora.img"
-#    echo -e "\n${GREEN}Successfully updated initramfs-fedora to\n${BLUE}$LATEST_OFFICIAL_INITRAMFS\n\n${DARK_RED}###################################################${NC}"
-#else
-#    echo -e "\n${RED}Failed to find the latest official initramfs\n\n${DARK_RED}###################################################${NC}"
-#fi
-
-# Create or update "initramfs-fedora-surface" symlink
-if [ -n "$LATEST_SURFACE_INITRAMFS" ]; then
-    if [ -n "$CURRENT_SURFACE_INITRAMFS_SYMLINK" ]; then
-        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous initramfs-fedora-surface version:\n${BLUE}$CURRENT_SURFACE_INITRAMFS_SYMLINK${NC}"
+if [ -n "$LATEST_OFFICIAL_INITRAMFS" ]; then
+    if [ -n "$CURRENT_FEDORA_INITRAMFS_SYMLINK" ]; then
+        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous initramfs-fedora version:\n${BLUE}$CURRENT_FEDORA_INITRAMFS_SYMLINK${NC}"
     else
-        echo -e "${DARK_RED}###################################################\n\n${RED}No previous initramfs-fedora-surface symlink found.${NC}"
+        echo -e "${DARK_RED}###################################################\n\n${RED}No previous initramfs-fedora symlink found.${NC}"
     fi
-    ln -srf "$LATEST_SURFACE_INITRAMFS" "${BOOT_DIR}/initramfs-fedora-surface.img"
-    echo -e "\n${GREEN}Successfully updated initramfs-fedora-surface to\n${BLUE}$LATEST_SURFACE_INITRAMFS\n\n${DARK_RED}###################################################${NC}"
+    ln -srf "$LATEST_OFFICIAL_INITRAMFS" "${BOOT_DIR}/initramfs-fedora.img"
+    echo -e "\n${GREEN}Successfully updated initramfs-fedora to\n${BLUE}$LATEST_OFFICIAL_INITRAMFS\n\n${DARK_RED}###################################################${NC}"
 else
-    echo -e "\n${RED}Failed to find the latest Surface initramfs\n\n${DARK_RED}###################################################${NC}"
+    echo -e "\n${RED}Failed to find the latest official initramfs\n\n${DARK_RED}###################################################${NC}"
 fi
 
+# Create or update "initramfs-fedora-${KERNEL_VARIANT}" symlink
+#if [ -n "$LATEST_VARIANT_INITRAMFS" ]; then
+#    if [ -n "$CURRENT_VARIANT_INITRAMFS_SYMLINK" ]; then
+#        echo -e "${DARK_RED}###################################################\n\n${YELLOW}Previous initramfs-fedora-${KERNEL_VARIANT} version:\n${BLUE}$CURRENT_VARIANT_INITRAMFS_SYMLINK${NC}"
+#    else
+#        echo -e "${DARK_RED}###################################################\n\n${RED}No previous initramfs-fedora-${KERNEL_VARIANT} symlink found.${NC}"
+#    fi
+#    ln -srf "$LATEST_VARIANT_INITRAMFS" "${BOOT_DIR}/initramfs-fedora-${KERNEL_VARIANT}.img"
+#    echo -e "\n${GREEN}Successfully updated initramfs-fedora-${KERNEL_VARIANT} to\n${BLUE}$LATEST_VARIANT_INITRAMFS\n\n${DARK_RED}###################################################${NC}"
+#else
+#    echo -e "\n${RED}Failed to find the latest $KERNEL_VARIANT initramfs\n\n${DARK_RED}###################################################${NC}"
+#fi
