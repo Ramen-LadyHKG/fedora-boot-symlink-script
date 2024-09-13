@@ -5,7 +5,7 @@ This script will generate a relative symbolic link with unified name to the late
 
 - The script will automatically run when `kernel-core` is installed or updated.
 - By default, the script only recognised official kernel.
-- For variants (zen, xanmod, surface etc.), you need to edit the script and uncomment the variants section to adapt your kernel version.
+- For variants (zen, xanmod, surface etc.), you need to edit the script and uncomment the variants section and change `KERNEL_VARIANT="surface"` to adapt your kernel version.
 - The run result will printed on the terminal when running `scriptlet` for `kernel-core`
 
 - your latest kernel `vmlinuz-$(uname -r)` will be linked as **`vmlinuz-fedora`**, whereas `initramfs-$(uname -r).img` will be **`initramfs-fedora.img`**
@@ -20,7 +20,8 @@ This script will generate a relative symbolic link with unified name to the late
 `sudo cp "98-create-vmlinuz-symlink.install" "/etc/kernel/install.d/98-create-vmlinuz-symlink.install"`
 
 **OPTIONAL**: adjust the filename number to adapt your `/etc/kernel/install.d/**` scripts run sequence.
-**OPTIONAL**: For variants (zen, xanmod, surface etc.), you need to edit the script and uncomment the variants section to adapt your kernel version.
+**OPTIONAL**: For variants (zen, xanmod, surface etc.), you need to edit the script and uncomment the variants section and change `KERNEL_VARIANT="surface"` to adapt your kernel version.
+
 
 ### rEFInd
 
